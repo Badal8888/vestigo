@@ -1,23 +1,32 @@
+"use client";
+
+import { useEffect } from "react";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-
-export const metadata = {
-  title: "Vestigo Insurance",
-  description: "Corporate & Industrial Insurance Advisory",
-};
+import Lenis from "@studio-freight/lenis";
 
 export default function RootLayout({ children }) {
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      smooth: true,
+      smoothTouch: true,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+  }, []);
+
   return (
     <html lang="en">
       <body>
         <Header />
-
-        {/* Keep this padding (header height space) */}
-        <main className="pt-24 min-h-screen bg-white">
-          {children}
-        </main>
-
+        <main className="pt-24 min-h-screen bg-white">{children}</main>
         <Footer />
       </body>
     </html>
