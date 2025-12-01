@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Lenis from "@studio-freight/lenis";
 
+
 export default function RootLayout({ children }) {
   useEffect(() => {
     const lenis = new Lenis({

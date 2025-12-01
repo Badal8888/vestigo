@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FiMenu, FiX, FiChevronDown } from "react-icons/fi";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [openMenu, setOpenMenu] = useState(null);
@@ -78,42 +79,57 @@ export default function Header() {
             </DropdownButton>
 
             {/* INDUSTRIES */}
-            <DropdownButton label="Industries" menuKey="industries" openMenu={openMenu} toggleMenu={toggleMenu}>
-              <MegaMenu columns={3}>
-                <Column
-                  title="Manufacturing"
-                  items={[
-                    ["Chemical", "/industries/chemical"],
-                    ["Pharmaceutical", "/industries/pharmaceutical"],
-                    ["SME / MSME", "/industries/sme-msme"],
-                    ["Plastic", "/industries/plastic"],
-                    ["Textile", "/industries/textile"],
-                  ]}
-                />
-                <Column
-                  title="Services & Logistics"
-                  items={[
-                    ["Hospitality", "/industries/hospitality"],
-                    ["BFSI", "/industries/bfsi"],
-                    ["E-commerce", "/industries/e-commerce"],
-                    ["Shipping & Cargo", "/industries/shipping-cargo-handling"],
-                    ["Engineering", "/industries/engineering"],
-                  ]}
-                />
-                <Column
-                  title="Special Industries"
-                  items={[
-                    ["Green Energy", "/industries/green-energy"],
-                    ["Automobile", "/industries/automobile"],
-                    ["Paper Mills", "/industries/paper-mills"],
-                    ["Wood / Laminates", "/industries/wood-laminates"],
-                    ["Packaging", "/industries/packaging"],
-                    ["Hospital / Education", "/industries/hospital-education"],
-                    ["IT", "/industries/it"],
-                  ]}
-                />
-              </MegaMenu>
-            </DropdownButton>
+            <div className="relative">
+              <button
+                className="hover:text-[#1C1C1C]"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenMenu(openMenu === "industries" ? null : "industries");
+                  window.location.href = "/industries"; 
+                }}
+              >
+                Industries ▾
+              </button>
+
+              {openMenu === "industries" && (
+                <MegaMenu columns={3}>
+                  <Column
+                    title="Manufacturing"
+                    items={[
+                      ["Chemical", "/industries/chemical"],
+                      ["Pharmaceutical", "/industries/pharmaceutical"],
+                      ["SME / MSME", "/industries/sme-msme"],
+                      ["Plastic", "/industries/plastic"],
+                      ["Textile", "/industries/textile"],
+                    ]}
+                  />
+
+                  <Column
+                    title="Services & Logistics"
+                    items={[
+                      ["Hospitality", "/industries/hospitality"],
+                      ["BFSI", "/industries/bfsi"],
+                      ["E-commerce", "/industries/e-commerce"],
+                      ["Shipping & Cargo", "/industries/shipping-cargo-handling"],
+                      ["Engineering", "/industries/engineering"],
+                    ]}
+                  />
+
+                  <Column
+                    title="Special Industries"
+                    items={[
+                      ["Green Energy", "/industries/green-energy"],
+                      ["Automobile", "/industries/automobile"],
+                      ["Paper Mills", "/industries/paper-mills"],
+                      ["Wood / Laminates", "/industries/wood-laminates"],
+                      ["Packaging", "/industries/packaging"],
+                      ["Hospital / Education", "/industries/hospital-education"],
+                      ["IT", "/industries/it"],
+                    ]}
+                  />
+                </MegaMenu>
+              )}
+            </div>
 
             <Link href="/blogs">Blogs</Link>
             <Link href="/careers">Careers</Link>
@@ -282,10 +298,10 @@ function DropdownItem({ href, children }) {
 function MegaMenu({ children, columns }) {
   return (
     <div
-      className="absolute bg-white shadow-xl rounded-md border-t-4 border-[#E8D534] mt-2 p-6 grid gap-6 z-50 text-[#1C2A7D]"
+      className="absolute left-1/2 -translate-x-1/2 bg-white shadow-xl rounded-md border-t-4 border-[#E8D534] mt-2 p-6 grid gap-3 z-50 text-[#1C2A7D]"
       style={{
         gridTemplateColumns: `repeat(${columns}, 1fr)`,
-        width: columns === 3 ? "900px" : "600px",
+        width: columns === 3 ? "750px" : "500px",
       }}
     >
       {children}
