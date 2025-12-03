@@ -19,17 +19,17 @@ export default function Header() {
     setMobileDropdown(mobileDropdown === menu ? null : menu);
   };
 
-  // Close dropdown on scroll/click
   useEffect(() => {
-    const close = () => setOpenMenu(null);
-    window.addEventListener("scroll", close);
-    return () => window.removeEventListener("scroll", close);
+    const handleClickOutside = () => setOpenMenu(null);
+    window.addEventListener("click", handleClickOutside);
+    return () => window.removeEventListener("click", handleClickOutside);
   }, []);
+
 
   return (
     <>
       {/* HEADER */}
-      <header className="w-full bg-white shadow fixed top-0 left-0 z-[9999] h-20 flex items-center">
+      <header className="w-full bg-white shadow fixed top-0 left-0 z-[9999] h-20 flex items-center relative">
         <div className="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
 
           {/* LOGO */}
@@ -39,7 +39,7 @@ export default function Header() {
 
           {/* DESKTOP NAV */}
           <nav
-            className="hidden md:flex items-center space-x-10 font-medium text-[#1C2A7D]"
+            className="hidden md:flex items-center space-x-10 font-medium text-[#1C2A7D] relative"
             onClick={(e) => e.stopPropagation()}
           >
             <Link href="/" className="hover:text-[#1C1C1C]">Home</Link>
@@ -79,57 +79,64 @@ export default function Header() {
             </DropdownButton>
 
             {/* INDUSTRIES */}
-            <div className="relative">
-              <button
-                className="hover:text-[#1C1C1C]"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setOpenMenu(openMenu === "industries" ? null : "industries");
-                  window.location.href = "/industries"; 
-                }}
-              >
-                Industries ▾
-              </button>
+            <div className="relative flex items-center gap-1">
+  
+  {/* Navigate to industries page */}
+  <Link href="/industries" className="hover:text-[#1C1C1C]">
+    Industries
+  </Link>
 
-              {openMenu === "industries" && (
-                <MegaMenu columns={3}>
-                  <Column
-                    title="Manufacturing"
-                    items={[
-                      ["Chemical", "/industries/chemical"],
-                      ["Pharmaceutical", "/industries/pharmaceutical"],
-                      ["SME / MSME", "/industries/sme-msme"],
-                      ["Plastic", "/industries/plastic"],
-                      ["Textile", "/industries/textile"],
-                    ]}
-                  />
+  {/* Arrow button ONLY opens dropdown */}
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setOpenMenu(openMenu === "industries" ? null : "industries");
+    }}
+  >
+    ▾
+  </button>
 
-                  <Column
-                    title="Services & Logistics"
-                    items={[
-                      ["Hospitality", "/industries/hospitality"],
-                      ["BFSI", "/industries/bfsi"],
-                      ["E-commerce", "/industries/e-commerce"],
-                      ["Shipping & Cargo", "/industries/shipping-cargo-handling"],
-                      ["Engineering", "/industries/engineering"],
-                    ]}
-                  />
+  {openMenu === "industries" && (
+    <MegaMenu columns={3}>
+      <Column
+        title="Manufacturing"
+        items={[
+          ["Chemical", "/industries/chemical"],
+          ["Pharmaceutical", "/industries/pharmaceutical"],
+          ["SME / MSME", "/industries/sme-msme"],
+          ["Plastic", "/industries/plastic"],
+          ["Textile", "/industries/textile"],
+        ]}
+      />
 
-                  <Column
-                    title="Special Industries"
-                    items={[
-                      ["Green Energy", "/industries/green-energy"],
-                      ["Automobile", "/industries/automobile"],
-                      ["Paper Mills", "/industries/paper-mills"],
-                      ["Wood / Laminates", "/industries/wood-laminates"],
-                      ["Packaging", "/industries/packaging"],
-                      ["Hospital / Education", "/industries/hospital-education"],
-                      ["IT", "/industries/it"],
-                    ]}
-                  />
-                </MegaMenu>
-              )}
-            </div>
+      <Column
+        title="Services & Logistics"
+        items={[
+          ["Hospitality", "/industries/hospitality"],
+          ["BFSI", "/industries/bfsi"],
+          ["E-commerce", "/industries/e-commerce"],
+          ["Shipping & Cargo", "/industries/shipping-cargo-handling"],
+          ["Engineering", "/industries/engineering"],
+        ]}
+      />
+
+      <Column
+        title="Special Industries"
+        items={[
+          ["Green Energy", "/industries/green-energy"],
+          ["Automobile", "/industries/automobile"],
+          ["Paper Mills", "/industries/paper-mills"],
+          ["Wood / Laminates", "/industries/wood-laminates"],
+          ["Packaging", "/industries/packaging"],
+          ["Hospital / Education", "/industries/hospital-education"],
+          ["IT", "/industries/it"],
+        ]}
+      />
+    </MegaMenu>
+  )}
+
+</div>
+
 
             <Link href="/blogs">Blogs</Link>
             <Link href="/careers">Careers</Link>
@@ -231,6 +238,8 @@ export default function Header() {
               <li><Link href="/industries/chemical" onClick={() => setMobileOpen(false)}>Chemical</Link></li>
               <li><Link href="/industries/pharmaceutical" onClick={() => setMobileOpen(false)}>Pharmaceutical</Link></li>
               <li><Link href="/industries/sme-msme" onClick={() => setMobileOpen(false)}>SME / MSME</Link></li>
+              <li><Link href="/industries/plastic" onClick={() => setMobileOpen(false)}>Plastic</Link></li>
+              <li><Link href="/industries/textile" onClick={() => setMobileOpen(false)}>Textile</Link></li>
             </ul>
           )}
         </li>
@@ -298,7 +307,7 @@ function DropdownItem({ href, children }) {
 function MegaMenu({ children, columns }) {
   return (
     <div
-      className="absolute left-1/2 -translate-x-1/2 bg-white shadow-xl rounded-md border-t-4 border-[#E8D534] mt-2 p-6 grid gap-3 z-50 text-[#1C2A7D]"
+      className="absolute left-1/2 -translate-x-1/2 bg-white shadow-xl rounded-md border-t-4 border-[#E8D534] top-full mt-3 p-6 grid gap-3 z-50 text-[#1C2A7D]"
       style={{
         gridTemplateColumns: `repeat(${columns}, 1fr)`,
         width: columns === 3 ? "750px" : "500px",
@@ -315,7 +324,12 @@ function Column({ title, items }) {
       <h4 className="font-bold mb-2 text-[#1C2A7D]">{title}</h4>
       <div className="space-y-1">
         {items.map(([label, link]) => (
-          <Link key={label} href={link} className="block hover:text-[#E8D534]">
+          <Link
+            key={label}
+            href={link}
+            onClick={() => setOpenMenu(null)}
+            className="block hover:text-[#E8D534]"
+          >
             {label}
           </Link>
         ))}
